@@ -19,6 +19,15 @@ function App() {
     client.models.Todo.create({ content: window.prompt("Todo content") });
   }
 
+  const fetchTodos = async () => {
+    const { data: items, errors } = await client.models.Todo.list();
+    alert(items.length + " todos fetched")
+  };
+
+  function deleteTodo(id: string) {
+    client.models.Todo.delete({ id })
+  }
+
   return (
     <Authenticator>
       {({})=> (
@@ -27,7 +36,7 @@ function App() {
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
+          <li onClick={() => deleteTodo(todo.id)} key={todo.id}>{todo.content}</li>
         ))}
       </ul>
       <div>
@@ -36,6 +45,8 @@ function App() {
         <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
           Review next step of this tutorial.
         </a>
+
+        <button onClick={fetchTodos}>Fetch Data</button>
       </div>
     </main>
      )}
